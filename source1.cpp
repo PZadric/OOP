@@ -12,12 +12,19 @@
 #include <QPainter>
 #include <QFileDialog>
 #include <QApplication>
+#include <QList>
 
 //bool mFirstClick=true;
 //bool mPaintFlag=true;
-int lineCount;
+int lineCount=0;
 QPoint pointPairs(int,int);
-
+bool za_crtanje;
+int tempx;
+int tempy;
+int i,j,k;
+int temp2y;
+int temp2x;
+int velicina=100;
 
 class MyMainWindow : public QMainWindow {
 public:
@@ -27,6 +34,7 @@ QLabel* MyLabel;
 //void mousePressEvent(QMouseEvent *event) override;
 void keyPressEvent(QKeyEvent *event) override;
 void paintEvent(QPaintEvent *event) override;
+void mousePressEvent(QMouseEvent *event) override;
 //void drawLines(QPaintEvent *event, int p);
 QMenu* EditMenu;
 //QAction* Crtanje;
@@ -40,37 +48,16 @@ void FileOpenMenu();
 QMenu* FileMenu;
 QAction* FileSaveAs;
 QAction* FileOpen;
+//virtual void setVisible(bool visible);
 
-void mousePressEvent(QMouseEvent * e)
-{
-    if(e->button() == Qt::LeftButton)
-        lineCount++;
-    {
-        //store 1st point
-        if(mFirstClick)
-        {
-            mStartX = e->x();
-            mStartY = e->y();
-            mFirstClick = false;
-            mPaintFlag=false;
-            update ();
-        }
-        //Mouse Pressed Again! 2nd point
-        else if(!mFirstClick)
-        {
-            mEndX = e->x();
-            mEndY = e->y();
-            mFirstClick = true;
-            mPaintFlag = true;
-            update();
-        }
-    }
-}
+
 
     int mStartX;
     int mStartY;
     int mEndX;
     int mEndY;
+    int tempoX;
+    int tempoY;
 
     bool mFirstClick;
     bool mPaintFlag;
@@ -78,6 +65,43 @@ void mousePressEvent(QMouseEvent * e)
 protected:
 
 };
+
+void MyMainWindow :: mousePressEvent(QMouseEvent * e)
+{
+    if(za_crtanje){
+
+    if(e->button() == Qt::LeftButton)
+        lineCount++;
+    {
+        //store 1st point
+        if(mFirstClick)
+        {
+
+            tempx=mEndX;
+            tempy=mEndY;
+            mStartX = e->x();
+            mStartY = e->y();
+            mPaintFlag=true;
+            mFirstClick = false;
+         //   mPaintFlag=false;
+            update ();
+        }
+        //Mouse Pressed Again! 2nd point
+        else if(!mFirstClick)
+        {
+            temp2x=mStartX;
+            temp2y=mStartY;
+            mEndX = e->x();
+            mEndY = e->y();
+            mFirstClick = true;
+            mPaintFlag = true;
+
+
+            update();
+
+        }
+    }
+}};
 
 
 int main(int argc, char **argv) {
@@ -179,7 +203,7 @@ setWindowTitle("Promjena teksta");
 //&
 
 void MyMainWindow::EditCrtanjeMenu() {
-
+za_crtanje=true;
 
 }
 
@@ -215,46 +239,74 @@ break;
 
 void MyMainWindow::paintEvent(QPaintEvent* e){
          //   MyMainWindow::paintEvent(e);
+   // if(za_crtanje){
     if(mPaintFlag)
     {
+        for(i=0; i<velicina; ++i){
+            for(j=0;j<velicina;++j){
+             for(k=0;k<velicina;++k){
 
-    int i=1,j;
+
         QPainter painter(this);
         QPen paintpen(Qt::red);
-        paintpen.setWidth(4);
+        paintpen.setWidth(8);
+        QPen bpaintpen(Qt::green);
+        bpaintpen.setWidth(8);
 
         QPen linepen(Qt::black);
         linepen.setWidth(4);
-        QPoint p1;
-        p1.setX(mStartX);
-        p1.setY(mStartY);
+        QPoint p[i];
+        QPoint p2[j];
+        QPoint p3[k];
+        p[i].setX(mStartX);
+        p[i].setY(mStartY);
       //  p2.setX(mStartX);
        // p2.setY(mStartY);
 
         painter.setPen(paintpen);
-        painter.drawPoint(p1);
+        painter.drawPoint(p[i]);
       //  painter.drawPoint(p2);
        // painter.drawLine(p2, p1);
-        QPoint p2;
 
-        p2.setX(mEndX);
-        p2.setY(mEndY);
 
-        painter.setPen(paintpen);
-        painter.drawPoint(p2);
+        p2[j].setX(mEndX);
+        p2[j].setY(mEndY);
+
+        painter.setPen(bpaintpen);
+        painter.drawPoint(p2[j]);
 
         painter.setPen(linepen);
-        painter.drawLine(p1, p2);
+        painter.drawLine(p[i], p2[j]);
 
 
+        p3[k].setX(tempx);
+        p3[k].setY(tempy);
+
+
+        painter.setPen(linepen);
+        painter.drawLine(p3[k], p[i]);
+        QPoint p4;
+        p4.setX(temp2x);
+        p4.setY(temp2y);
+        painter.setPen(paintpen);
+        painter.drawPoint(p4);
+        painter.setPen(linepen);
+        painter.drawLine(p3[k], p4);
+
+
+     //   painter.drawLines(p5 ,lineCount);
+
+        i=i+1;j=j+1;k=k+1;
+        void show();
            //     i++;
         //painter.drawLines(p1,lineCount);
+   //     void setVisible(bool visible);
 
 
+}}
+       }}}
 
-        }
 
-}
 
 //void MyMainWindow::drawLines(const QPoint* pointPairs, int lineCount)
 //snimanje u datoteku*/

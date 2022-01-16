@@ -40,8 +40,10 @@ QMenu* EditMenu;
 //QAction* Crtanje;
 QAction* EditNoviTekst;
 QAction* EditCrtanje;
+QAction* EditUgasiCrtanje;
 void EditNoviTekstMenu();
 void EditCrtanjeMenu();
+void UgasiEditCrtanjeMenu();
 //void CrtanjeMenu();
 void FileSaveAsMenu();
 void FileOpenMenu();
@@ -61,6 +63,8 @@ QAction* FileOpen;
 
     bool mFirstClick;
     bool mPaintFlag;
+       bool firstclick;
+       int i,j,k;
 
 protected:
 
@@ -81,8 +85,10 @@ void MyMainWindow :: mousePressEvent(QMouseEvent * e)
             tempy=mEndY;
             mStartX = e->x();
             mStartY = e->y();
+            i++;
             mPaintFlag=true;
             mFirstClick = false;
+
          //   mPaintFlag=false;
             update ();
         }
@@ -93,8 +99,10 @@ void MyMainWindow :: mousePressEvent(QMouseEvent * e)
             temp2y=mStartY;
             mEndX = e->x();
             mEndY = e->y();
+            j++;
             mFirstClick = true;
             mPaintFlag = true;
+
 
 
             update();
@@ -138,6 +146,11 @@ EditCrtanje = new QAction(tr("&Crtanje"), this);
 EditCrtanje->setShortcut(tr("CTRL+L"));
 connect(EditCrtanje, &QAction::triggered,this,&MyMainWindow::EditCrtanjeMenu);
 EditMenu->addAction(EditCrtanje);
+
+EditUgasiCrtanje = new QAction(tr("&Ugasi Crtanje"), this);
+EditUgasiCrtanje->setShortcut(tr("CTRL+H"));
+connect(EditUgasiCrtanje, &QAction::triggered,this,&MyMainWindow::UgasiEditCrtanjeMenu);
+EditMenu->addAction(EditUgasiCrtanje);
 
 
 FileSaveAs = new QAction(tr("&Save As..."), this);
@@ -203,8 +216,20 @@ setWindowTitle("Promjena teksta");
 //&
 
 void MyMainWindow::EditCrtanjeMenu() {
-za_crtanje=true;
 
+  // if(mFirstClick){
+za_crtanje=true;
+//void show ();
+//za_crtanje=false;
+
+
+//}
+ //  else if(!mFirstClick){
+ //  za_crtanje=false;
+ //   return;
+}
+void MyMainWindow::UgasiEditCrtanjeMenu() {
+    za_crtanje=false;
 }
 
 void MyMainWindow::EditNoviTekstMenu() {
@@ -218,6 +243,7 @@ MyLabel->setText(dialog.lineEdit->text());
 //void MyMainWindow::CrtanjeMenu()  {
 
 //}
+
 
 void MyMainWindow::keyPressEvent(QKeyEvent *event) {
 switch( event->key() ){
@@ -242,9 +268,9 @@ void MyMainWindow::paintEvent(QPaintEvent* e){
    // if(za_crtanje){
     if(mPaintFlag)
     {
-        for(i=0; i<velicina; ++i){
-            for(j=0;j<velicina;++j){
-             for(k=0;k<velicina;++k){
+       // for(i=0; i<velicina; ++i){
+        //    for(j=0;j<velicina;++j){
+          //   for(k=0;k<velicina;++k){
 
 
         QPainter painter(this);
@@ -304,7 +330,7 @@ void MyMainWindow::paintEvent(QPaintEvent* e){
 
 
 }}
-       }}}
+      // }}}
 
 
 
@@ -329,6 +355,9 @@ out << pos().x() << Qt::endl;
 out << pos().y() << Qt::endl;
 out << size().width() << Qt::endl;
 out << size().height() << Qt::endl;
+//out << pos().p4 << Qt::endl;
+
+  // out << pos().e() <<Qt::endl;
 }
 }
 
